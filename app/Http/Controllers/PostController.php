@@ -27,16 +27,15 @@ class PostController extends Controller
             'content' => 'required|string',
         ]);
 
-        $guru = Auth::user();
-
         Post::create([
-            'user_id' => $guru->id,
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'content' => $request->content,
         ]);
 
         return redirect()->route('posts.index')->with('success', 'Materi berhasil dibuat.');
     }
+
 
     public function show(Post $post)
     {
