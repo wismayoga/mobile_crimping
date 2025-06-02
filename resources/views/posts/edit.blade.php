@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Materi')
+@section('title', 'Edit Materi')
 
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/trix@2.1.15/dist/trix.min.css" rel="stylesheet">
@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="container">
-        <h1 class="h3 mb-4 text-gray-800">Tambah Materi Baru</h1>
+        <h1 class="h3 mb-4 text-gray-800">Edit Materi</h1>
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -20,22 +20,22 @@
             </div>
         @endif
 
-        <form action="{{ route('posts.store') }}" method="POST">
+        <form action="{{ route('posts.update', $post) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <div class="form-group">
                 <label for="title">Judul Materi</label>
-                <input type="text" name="title" class="form-control" required value="{{ old('title') }}">
+                <input type="text" name="title" class="form-control" required value="{{ old('title', $post->title) }}">
             </div>
 
             <div class="form-group">
                 <label for="content">Isi Materi</label>
-                <input id="isiMateri" type="hidden" name="content" value="{{ old('content') }}">
+                <input id="isiMateri" type="hidden" name="content" value="{{ old('content', $post->content) }}">
                 <trix-editor input="isiMateri"></trix-editor>
             </div>
 
-
-            <button type="submit" class="btn btn-primary">Simpan Materi</button>
+            <button type="submit" class="btn btn-primary">Perbarui Materi</button>
             <a href="{{ route('posts.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </div>
@@ -43,6 +43,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/trix@2.1.15/dist/trix.umd.min.js"></script>
+
     <script>
         document.addEventListener("trix-attachment-add", function(event) {
             if (event.attachment.file) {

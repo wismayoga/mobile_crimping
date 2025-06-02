@@ -11,7 +11,7 @@
     <title>@yield('title')</title>
 
     @include('layouts.header')
-    @yield('styles')
+    @stack('styles')
 </head>
 
 <body id="page-top">
@@ -99,7 +99,7 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-    @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

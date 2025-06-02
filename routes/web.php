@@ -37,7 +37,7 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::resource('posts', PostController::class);
     Route::resource('quizzes', QuizController::class);
     Route::resource('siswa', SiswaController::class)->only(['index', 'show', 'edit', 'update']);
-    Route::post('/ckeditor/upload', [App\Http\Controllers\CKEditorController::class, 'upload'])->name('ckeditor.upload');
+    Route::post('/trix-upload', [App\Http\Controllers\TrixUploadController::class, 'upload'])->name('trix.upload');
 
     // Route khusus guru lainnya
 });
