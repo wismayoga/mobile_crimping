@@ -10,8 +10,7 @@ class QuizController extends Controller
 {
     public function index()
     {
-        $guru = Auth::user();
-        $quizzes = Quiz::where('user_id', $guru->id)->latest()->paginate(10);
+        $quizzes = Quiz::where('user_id', Auth::id())->latest()->paginate(10);
         return view('quizzes.index', compact('quizzes'));
     }
 
@@ -22,17 +21,31 @@ class QuizController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
-
+        $request->validate(['title' => 'required']);
         Quiz::create([
             'user_id' => Auth::id(),
-            'title' => $request->title,
+            'title' => $request->title
         ]);
-
         return redirect()->route('quizzes.index')->with('success', 'Kuis berhasil dibuat.');
     }
 
-    // edit, update, show, destroy mirip PostController
+    public function edit(Quiz $quiz)
+    {
+        return view('quizzes.edit', compact('quiz'));
+    }
+
+    public function update(Request $request, Quiz $quiz)
+    {
+        $request->validate(['title' => 'required']);
+        $quiz->update(['title' => $request->title]);
+        return redirect()->route('quizzes.index')->with('success', 'Kuis berhasil diperbarui.');
+    }
+
+    public function show(Quiz $quiz)
+    {
+        // Load questions relationship jika belum eager loaded
+        $quiz->load('questions');
+
+        return view('quizzes.show', compact('quiz'));
+    }
 }

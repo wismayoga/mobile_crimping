@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Materi')
+@section('title', 'Kelola Materi')
 
 @section('content')
     <!-- Page Heading -->

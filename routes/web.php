@@ -5,6 +5,7 @@ use App\Http\Controllers\GuruDashboardController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\QuizQuestionController;
 use App\Http\Controllers\SiswaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,10 +36,22 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middle
 Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/guru/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard');
     Route::resource('posts', PostController::class);
-    Route::resource('quizzes', QuizController::class);
     Route::resource('siswa', SiswaController::class)->only(['index', 'show', 'edit', 'update']);
     Route::post('/trix-upload', [App\Http\Controllers\TrixUploadController::class, 'upload'])->name('trix.upload');
 
+    // Rute utama untuk kelola kuis
+    Route::resource('quizzes', QuizController::class);
+
+    // Rute untuk kelola soal dalam setiap kuis
+    Route::prefix('quizzes/{quiz}')->name('questions.')->group(function () {
+        Route::get('questions', [QuizQuestionController::class, 'index'])->name('index');
+        Route::get('questions/create', [QuizQuestionController::class, 'create'])->name('create');
+        Route::post('questions', [QuizQuestionController::class, 'store'])->name('store');
+        Route::get('questions/{question}/edit', [QuizQuestionController::class, 'edit'])->name('edit');
+        Route::put('questions/{question}', [QuizQuestionController::class, 'update'])->name('update');
+        // Optional delete (kalau butuh)
+        Route::delete('questions/{question}', [QuizQuestionController::class, 'destroy'])->name('destroy');
+    });
     // Route khusus guru lainnya
 });
 
